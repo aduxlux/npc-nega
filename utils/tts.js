@@ -12,14 +12,14 @@ export async function textToSpeech(text) {
     });
 
     if (!res.ok) {
-      const errText = await res.text();
-      throw new Error("TTS Error: " + errText);
+      const errorText = await res.text();
+      throw new Error("TTS Error: " + errorText);
     }
 
     const arrayBuffer = await res.arrayBuffer();
     return Buffer.from(arrayBuffer).toString('base64');
   } catch (err) {
-    console.error("Error in TTS:", err);
+    console.error("TTS Error:", err);
     throw err;
   }
 }

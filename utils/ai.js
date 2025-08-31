@@ -18,11 +18,10 @@ export async function generateNPCText(npcId, playerMessage) {
       body: JSON.stringify({ inputs: prompt })
     });
     const data = await res.json();
-
     if (data.error) throw new Error(data.error);
     return data[0].generated_text.split('NPC:')[1]?.trim() || "NPC didn't respond.";
   } catch (err) {
-    console.error("Error calling Hugging Face AI:", err);
+    console.error("AI Error:", err);
     throw err;
   }
 }
