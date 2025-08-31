@@ -1,7 +1,6 @@
 import fetch from 'node-fetch';
 
-// Public Hugging Face model
-const MODEL = 'bigscience/bloomz-560m';
+const MODEL = 'tiiuae/falcon-7b-instruct'; // reliable public model
 
 export async function generateNPCText(npcId, playerMessage) {
   const personalities = {
@@ -22,12 +21,12 @@ export async function generateNPCText(npcId, playerMessage) {
     });
 
     if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(`HF AI Error: ${errorText}`);
+      const text = await res.text();
+      throw new Error(text);
     }
 
     const data = await res.json();
-    return data[0]?.generated_text.split('NPC:')[1]?.trim() || "NPC didn't respond.";
+    return data[0]?.generated_text?.split('NPC:')[1]?.trim() || "NPC didn't respond.";
   } catch (err) {
     console.error("AI Error:", err);
     throw err;
