@@ -1,5 +1,5 @@
-import { generateNPCText } from '../../utils/ai.js';
-import { textToSpeech } from '../../utils/tts.js';
+import { generateNPCText } from '../utils/ai.js';
+import { textToSpeech } from '../utils/tts.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
