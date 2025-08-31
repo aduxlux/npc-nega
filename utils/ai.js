@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 
-// Using a public model that works reliably
-const MODEL = 'bigcode/starcoder';
+// Public Hugging Face model
+const MODEL = 'bigscience/bloomz-560m';
 
 export async function generateNPCText(npcId, playerMessage) {
   const personalities = {
@@ -21,10 +21,13 @@ export async function generateNPCText(npcId, playerMessage) {
       body: JSON.stringify({ inputs: prompt })
     });
 
-    const data = await res.json();
-    if (data.error) throw new Error(data.error);
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`HF AI Error: ${errorText}`);
+    }
 
-    return data[0].generated_text.split('NPC:')[1]?.trim() || "NPC didn't respond.";
+    const data = await res.json();
+    return data[0]?.generated_text.split('NPC:')[1]?.trim() || "NPC didn't respond.";
   } catch (err) {
     console.error("AI Error:", err);
     throw err;

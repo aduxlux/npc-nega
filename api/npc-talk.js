@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   console.log("Request method:", req.method);
   console.log("Body:", req.body);
 
-  // Allow GET for browser test
+  // Browser GET test
   if (req.method === 'GET') {
     return res.status(200).json({ message: "Send a POST request with npcId and playerMessage." });
   }
@@ -18,14 +18,11 @@ export default async function handler(req, res) {
       return res.status(400).send('Missing npcId or playerMessage');
     }
 
-    // Generate NPC text
     const npcText = await generateNPCText(npcId, playerMessage);
     console.log("NPC Text:", npcText);
 
-    // Convert to speech
     const voiceBase64 = await textToSpeech(npcText);
 
-    // Return JSON
     res.status(200).json({ text: npcText, voice: voiceBase64 });
   } catch (err) {
     console.error("Server Error:", err);

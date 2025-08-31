@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-// Using a reliable public TTS model
+// Public TTS model
 const TTS_MODEL = 'coqui-ai/tts-en-ljspeech';
 
 export async function textToSpeech(text) {
@@ -16,7 +16,7 @@ export async function textToSpeech(text) {
 
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error("TTS Error: " + errorText);
+      throw new Error(`TTS Error: ${errorText}`);
     }
 
     const arrayBuffer = await res.arrayBuffer();
