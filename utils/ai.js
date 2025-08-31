@@ -8,14 +8,21 @@ export async function generateNPCText(npcId, playerMessage) {
   };
   const prompt = `${personalities[npcId]}\nPlayer: ${playerMessage}\nNPC:`;
 
-  const res = await fetch('https://api-inference.huggingface.co/models/gpt-j-6B', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${process.env.HF_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ inputs: prompt })
-  });
-  const data = await res.json();
-  return data[0].generated_text.split('NPC:')[1].trim();
+  try {
+    const res = await fetch('https://api-inference.huggingface.co/models/gpt-j-6B', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.HF_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ inputs: prompt })
+    });
+    const data = await res.json();
+
+    if (data.error) throw new Error(data.error);
+    return data[0].generated_text.split('NPC:')[1]?.trim() || "NPC didn't respond.";
+  } catch (err) {
+    console.error("Error calling Hugging Face AI:", err);
+    throw err;
+  }
 }
