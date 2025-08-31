@@ -1,8 +1,11 @@
 import fetch from 'node-fetch';
 
+// Using a reliable public TTS model
+const TTS_MODEL = 'coqui-ai/tts-en-ljspeech';
+
 export async function textToSpeech(text) {
   try {
-    const res = await fetch('https://api-inference.huggingface.co/models/coqui/tts', {
+    const res = await fetch(`https://api-inference.huggingface.co/models/${TTS_MODEL}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${process.env.HF_API_KEY}`,
